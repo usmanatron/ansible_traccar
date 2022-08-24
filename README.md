@@ -14,8 +14,8 @@ This role assumes the following:
 
 | Name | Details |
 | --- | --- |
-| `traccar_version` | TODO |
-| `traccar_database_password` | TODO |
+| `traccar_version` | version of the Docker container to use |
+| `traccar_database_password` | Password for the traccar database |
 | `traccar_smtp_host` | Email host to use |
 | `traccar_smtp_port` | Post of the above Email host to use |
 | `traccar_smtp_from` | From address |
