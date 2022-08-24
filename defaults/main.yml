@@ -1,2 +1,5 @@
 ---
-# defaults file for ansible_role_template
+app_name: traccar
+app_folder: /apps/{{ app_name }}
+traccar_database_username: "{{ app_name }}"
+traccar_database_version: "12.5"

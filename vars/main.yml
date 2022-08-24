@@ -1,2 +1,9 @@
 ---
-# vars file for ansible_role_template
+traccar_version: ""
+traccar_database_password: ""
+
+traccar_smtp_host: ""
+traccar_smtp_port: ""
+traccar_smtp_from: ""
+traccar_smtp_username: ""
+traccar_smtp_password: ""

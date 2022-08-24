@@ -1,6 +1,47 @@
 ---
-# tasks file for ansible_role_template
-- name: "Hello World!"
-  ansible.builtin.debug:
-    msg: Hello World!
-    
+# Setup
+- name: Add {{ app_name }} user
+  ansible.builtin.user:
+    name: "{{ app_name }}"
+    state: present
+
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: "{{ app_name }}"
+    groups: docker
+    append: true
+
+- name: Add app directories
+  ansible.builtin.file:
+    path: "{{ app_folder }}/{{ item }}"
+    mode: 0644
+    owner: "{{ app_name }}"
+    state: directory
+  loop:
+  - "database"
+  - "logs"
+
+# Application
+- name: Add templates
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ app_folder }}/{{ item }}"
+    mode: 0644
+  loop:
+    - "docker-compose.yml"
+    - "traccar.xml"
+
+- name: Start Docker Compose Services
+  community.docker.docker_compose:
+    project_src: "{{ app_folder }}"
+    state: present
+
+# Backups
+- name: Add DB backups
+  ansible.builtin.include_role:
+    name: usmanatron.backup_postgresql
+  vars:
+    parent_directory: "{{ app_folder }}"
+    database_name: "{{ app_name }}"
+    database_username: "{{ traccar_database_username }}"
+    database_password: "{{ traccar_database_password }}"

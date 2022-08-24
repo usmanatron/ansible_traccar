@@ -1,0 +1,27 @@
+# {{ ansible_managed }}
+version: "3.7"
+
+services:
+  app:
+    image: "traccar/traccar:{{ traccar_version }}"
+    ports:
+      - 8080:8082
+      - 5000-5150:5000-5150
+      - 5000-5150:5000-5150/udp
+    restart: always
+    volumes:
+      - "{{ app_folder }}/logs:/opt/traccar/logs"
+      - "{{ app_folder }}/traccar.xml:/opt/traccar/conf/traccar.xml:ro"
+
+  db:
+    image: postgres:{{ traccar_database_version }}
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_USER={{ traccar_database_username }}
+      - POSTGRES_PASSWORD={{ traccar_database_password }}
+    volumes:
+      -  {{ app_folder }}/database:/var/lib/postgresql/data
+
+
